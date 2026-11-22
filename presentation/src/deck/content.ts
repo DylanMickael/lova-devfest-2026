@@ -11,9 +11,9 @@ export const ISSUE = {
 };
 
 export const TEAM = [
-  { handle: "endy-rkt", role: "Gateway, MVP & architecture système" },
-  { handle: "papangoo", role: "Contenus, médias & vérification" },
-  { handle: "salandri-42", role: "NFT & provenance numérique" },
-  { handle: "Sesedra", role: "UI/UX & frontend" },
-  { handle: "shidoAdr", role: "Authentification, LiDAR & 3D" },
+  { name: "Dylan", role: "Marketing" },
+  { name: "Flavien", role: "Développement backend" },
+  { name: "Rajo", role: "Développement frontend" },
+  { name: "Gaël", role: "Blockchain et infrastructure" },
+  { name: "Ryan", role: "Développement IA" },
 ] as const;

@@ -138,6 +138,7 @@
 .tools li:first-child { padding-left: 0; }
 .tools li + li { border-left: 1px solid var(--rule); }
 .tools-no { font-family: var(--mono); font-size: 14px; color: var(--fg-3); }
+.tools-logo { width: clamp(40px, min(4.4vw, 8vh), 72px); height: auto; margin: clamp(4px, 1.2vh, 12px) 0; fill: var(--fg); }
 .tools strong { font-family: var(--display); font-weight: 800; font-stretch: var(--wide); text-transform: uppercase; font-size: clamp(22px, min(2.4vw, 4.4vh), 40px); line-height: 1; overflow-wrap: anywhere; }
 .tools-role { font-family: var(--pixel); font-size: 12px; line-height: 16px; text-transform: uppercase; color: var(--accent); }
 .tools p { margin: auto 0 0; font-size: 14px; line-height: 20px; color: var(--fg-2); }
@@ -178,9 +179,10 @@
 .biz-note b { color: var(--fg); }
 
 /* ── 9 · Merci et l’équipe ── */
+.team-label { margin: clamp(4px, 1vh, 12px) 0 -4px; font-family: var(--pixel); font-size: 12px; line-height: 16px; text-transform: uppercase; color: var(--fg-2); }
 .team-list { margin: 0; border-top: 1px solid var(--fg); }
 .team-list div { display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); gap: 16px; align-items: baseline; padding: clamp(6px, 1.3vh, 12px) 0; border-bottom: 1px solid var(--rule); }
-.team-list dt { font-family: var(--mono); font-size: clamp(16px, min(1.6vw, 3vh), 24px); font-weight: 500; }
+.team-list dt { font-family: var(--display); font-weight: 700; font-stretch: var(--wide); text-transform: uppercase; font-size: clamp(18px, min(1.8vw, 3.4vh), 28px); line-height: 1; }
 .team-list dd { margin: 0; font-size: 14px; line-height: 20px; color: var(--fg-2); }
 .thanks-credits { margin: 0; font-size: 11px; line-height: 16px; color: var(--fg-3); max-width: 70ch; }
 

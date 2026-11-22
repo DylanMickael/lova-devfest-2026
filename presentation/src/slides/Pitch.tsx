@@ -1,6 +1,7 @@
 import { Artifact } from "../components/Artifact";
 import { GenArt } from "../components/GenArt";
 import { Barcode, Certificate } from "../components/Print";
+import { TOOL_LOGOS, type ToolLogo } from "../components/toolLogos";
 import { Caption, Headline, Kicker, Rule, Stage, Standfirst } from "../components/Primitives";
 import { ISSUE, TEAM } from "../deck/content";
 import type { SceneProps } from "../deck/types";
@@ -205,12 +206,12 @@ export function How({ instant, no }: SceneProps) {
 
 /* ───────────── 6 · Les outils ───────────── */
 
-const TOOLS = [
-  { name: "Next.js", role: "Interface web", body: "Pages, routes et rendu de l’interface." },
-  { name: "Three.js", role: "3D temps réel", body: "Galerie, exposition en profondeur, visionneuse." },
-  { name: "NestJS", role: "Microservices", body: "Gateway, Auth, Contenu, NFT et 3D." },
-  { name: "Solidity", role: "Contrat intelligent", body: "ERC‑721 de provenance sur Avalanche." },
-  { name: "Docker", role: "Déploiement", body: "Un conteneur par service, une commande." },
+const TOOLS: { name: string; logo: ToolLogo; role: string; body: string }[] = [
+  { name: "Next.js", logo: "nextdotjs", role: "Interface web", body: "Pages, routes et rendu de l’interface." },
+  { name: "Three.js", logo: "threedotjs", role: "3D temps réel", body: "Galerie, exposition en profondeur, visionneuse." },
+  { name: "NestJS", logo: "nestjs", role: "Microservices", body: "Gateway, Auth, Contenu, NFT et 3D." },
+  { name: "Solidity", logo: "solidity", role: "Contrat intelligent", body: "ERC‑721 de provenance sur Avalanche." },
+  { name: "Docker", logo: "docker", role: "Déploiement", body: "Un conteneur par service, une commande." },
 ];
 
 export function Tools({ instant, no }: SceneProps) {
@@ -222,6 +223,7 @@ export function Tools({ instant, no }: SceneProps) {
         {TOOLS.map((t, i) => (
           <li key={t.name} data-in="up" data-at={0.8 + i * 0.1}>
             <span className="tools-no">{String(i + 1).padStart(2, "0")}</span>
+            <svg className="tools-logo" viewBox="0 0 24 24" aria-hidden="true"><path d={TOOL_LOGOS[t.logo]} /></svg>
             <strong>{t.name}</strong>
             <span className="tools-role">{t.role}</span>
             <p>{t.body}</p>
@@ -389,10 +391,11 @@ export function Thanks({ instant }: SceneProps) {
       <div className="back-text">
         <h1 id="slide-title" className="back-title" data-split="chars" data-at="0.3">Misaotra.</h1>
         <p className="back-sub" data-in="fade" data-at="1">Merci · Thank you</p>
+        <p className="team-label" data-in="fade" data-at="1.1">L’équipe {ISSUE.name}</p>
         <dl className="team-list">
           {TEAM.map((m, i) => (
-            <div key={m.handle} data-in="up" data-at={1.2 + i * 0.1}>
-              <dt>@{m.handle}</dt>
+            <div key={m.name} data-in="up" data-at={1.2 + i * 0.1}>
+              <dt>{m.name}</dt>
               <dd>{m.role}</dd>
             </div>
           ))}
