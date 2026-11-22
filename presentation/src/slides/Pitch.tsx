@@ -172,10 +172,8 @@ export function How({ instant, no }: SceneProps) {
           </div>
           <span className="pillar-no">01</span>
           <h2>Intelligence artificielle</h2>
-          <ul>
-            <li>Une photo devient un modèle 3D texturé (Meshy, image → 3D).</li>
-            <li>Des signaux d’aide à la revue : l’IA signale, l’humain décide.</li>
-          </ul>
+          <p>Une photo devient un modèle 3D.</p>
+          <span className="pillar-tags">Meshy · revue assistée</span>
         </section>
         <section className="pillar" data-in="up" data-at="0.85">
           <div className="pillar-visual pillar-visual--ar">
@@ -183,21 +181,15 @@ export function How({ instant, no }: SceneProps) {
           </div>
           <span className="pillar-no">02</span>
           <h2>Réalité augmentée</h2>
-          <ul>
-            <li>Une exposition 3D qu’on traverse en profondeur.</li>
-            <li>L’objet posé chez soi, à l’échelle (WebXR, Quick Look).</li>
-            <li>Le scan LiDAR d’une sculpture depuis un iPhone.</li>
-          </ul>
+          <p>L’œuvre posée chez soi, à l’échelle.</p>
+          <span className="pillar-tags">WebXR · Quick Look · LiDAR</span>
         </section>
         <section className="pillar" data-in="up" data-at="1">
           <div className="pillar-visual pillar-visual--chain"><Certificate seed="pitch-provenance" lot={7} /></div>
           <span className="pillar-no">03</span>
           <h2>Blockchain</h2>
-          <ul>
-            <li>Un certificat de provenance ERC‑721 sur Avalanche.</li>
-            <li>L’empreinte sha256 du fichier maître, la fiche figée sur IPFS.</li>
-            <li>Pas de vente, pas de spéculation : une trace.</li>
-          </ul>
+          <p>Chaque œuvre garde sa preuve de provenance.</p>
+          <span className="pillar-tags">ERC‑721 · Avalanche · IPFS</span>
         </section>
       </div>
     </Stage>
