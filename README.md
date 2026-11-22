@@ -30,10 +30,14 @@ On peut aussi naviguer par balayage tactile. L’URL `#n` ouvre la page *n*. Les
 
 ## Direction artistique
 
-- **Papiers** : chaque page choisit son fond, en alternance clair et sombre : ivoire (`paper`), sable (`sand`), encre (`ink`), lie-de-vin (`wine`). Le titre courant et le folio suivent la page affichée.
-- **Typographies** : Bodoni Moda pour la manchette et les titres, Archivo condensé pour les chiffres et la titraille, Newsreader pour le texte courant, IBM Plex Mono pour les données.
-- **Motion** : le tourne-page est un balayage `clip-path` ; les titres montent ligne à ligne, les filets se tracent, les schémas se dessinent. Pas de flou, de mode de fusion ni de `backdrop-filter` : l’animation reste fluide sur une machine modeste.
-- **Visuels** : motifs tissés génératifs et statuette 3D procédurale. Aucune image patrimoniale n’est reproduite tant que ses droits ne sont pas validés. Les références de token sont des spécimens étiquetés.
+Le numéro suit le [`DESIGN.md`](https://github.com/songomby-D1/devfest2026/blob/develop/DESIGN.md) de LOVA : un musée qui a l’allure d’un pas de tir.
+
+- **Fonds** : chaque page choisit son fond, en alternance clair et sombre : papier `#FBFAF4` (`paper`), ciel `#CCE6F6 → #B8DAF1` (`sand`), galerie `#0D0C0B` sous un projecteur chaud (`ink`), indigo `#1F2A5C` (`wine`). L’en-tête et le HUD suivent la page affichée.
+- **Accent** : un seul, le lime `#C0FE04`. Il surligne le mot clé du titre sur fond clair, l’écrit sur fond sombre, et remplit l’axe de progression, le focus et la sélection.
+- **Typographies** (OFL, auto-hébergées en WOFF2) : TikTok Sans pour les titres (700, largeur 120, capitales) et le texte, Departure Mono pour l’interface (en-tête, HUD, surtitres, étiquettes), Geist Mono pour les chiffres et les données.
+- **Grille** : trois colonnes à marge `clamp(16px, 4.36vw, 72px)`, repères visibles et deux horizontales à 33,2 % et 68,7 % avec des croix aux croisements. Interface plate, filets de 1 px ; la profondeur va aux œuvres.
+- **Motion** : le tourne-page est un balayage `clip-path` ; les titres montent ligne à ligne (1,2 s, 80 ms de décalage, `cubic-bezier(.22, 1, .36, 1)`), les paragraphes montent de 12 px. `prefers-reduced-motion` rend tout instantané.
+- **Visuels** : motifs tissés génératifs dans la palette lamba et statuette 3D procédurale en matière « ballon ». Aucune image patrimoniale n’est reproduite tant que ses droits ne sont pas validés. Les références de token sont des spécimens étiquetés.
 
 ## Code
 

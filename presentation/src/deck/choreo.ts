@@ -11,7 +11,8 @@ gsap.registerPlugin(useGSAP, SplitText, DrawSVGPlugin, ScrambleTextPlugin, Custo
 // Pas de lissage de latence : quand une scène 3D charge le GPU, la chorégraphie
 // garde son horloge réelle au lieu de ralentir.
 gsap.ticker.lagSmoothing(0);
-CustomEase.create("silk", "M0,0 C0.16,1 0.3,1 1,1");
+// Courbe d’entrée de DESIGN.md : cubic-bezier(.22, 1, .36, 1).
+CustomEase.create("silk", "M0,0 C0.22,1 0.36,1 1,1");
 CustomEase.create("trace", "M0,0 C0.45,0 0.25,1 1,1");
 
 const HEX = "0123456789abcdef";
@@ -62,8 +63,9 @@ export function useChoreo(instant: boolean): RefObject<HTMLDivElement | null> {
         } else {
           const split = SplitText.create(node, { type: "lines", mask: "lines", linesClass: "split-line" });
           splits.push(split);
-          tl.from(split.lines, { yPercent: 110, rotate: 1.5, duration: 1, stagger: 0.09, ease: "power4.out" }, at);
-          length = 0.3 + split.lines.length * 0.09;
+          // Titres : ligne par ligne depuis le bas, 1,2 s, 80 ms de décalage (DESIGN.md).
+          tl.from(split.lines, { yPercent: 110, duration: 1.2, stagger: 0.08, ease: "silk" }, at);
+          length = 0.3 + split.lines.length * 0.08;
         }
       } else if (d.in !== undefined) {
         const dur = Number(d.dur ?? 0.85);
@@ -75,7 +77,7 @@ export function useChoreo(instant: boolean): RefObject<HTMLDivElement | null> {
           case "scale": Object.assign(from, { scale: 0.94, autoAlpha: 0, transformOrigin: "50% 60%" }); break;
           case "clip": Object.assign(from, { clipPath: "inset(0% 0% 100% 0%)", duration: Number(d.dur ?? 1.1), ease: "power3.inOut" }); break;
           case "wipe": Object.assign(from, { clipPath: "inset(0% 100% 0% 0%)", duration: Number(d.dur ?? 0.9), ease: "power3.inOut" }); break;
-          default: Object.assign(from, { y: 28, autoAlpha: 0 });
+          default: Object.assign(from, { y: 12, autoAlpha: 0 });
         }
         tl.from(node, from, at);
         length = 0.22;

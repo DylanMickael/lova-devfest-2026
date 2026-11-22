@@ -13,140 +13,206 @@
   position: absolute;
   inset: 0;
   overflow: hidden;
-  background: var(--bg);
+  background: var(--bg-image), var(--bg);
+  background-color: var(--bg);
   color: var(--fg);
   will-change: clip-path, transform;
-}
-.page::after {
-  content: "";
-  position: absolute; inset: 0;
-  pointer-events: none;
-  background-image: var(--grain-img);
-  opacity: var(--grain);
 }
 
 .stage {
   position: absolute;
   inset: 0;
-  padding: calc(var(--runner) + clamp(10px, 3vh, 36px)) var(--gutter) calc(var(--folio) + clamp(8px, 2vh, 24px));
+  padding: calc(var(--runner) + clamp(10px, 3vh, 36px)) calc(var(--gutter) + var(--pad)) calc(var(--folio) + clamp(8px, 2vh, 24px));
   display: flex;
   flex-direction: column;
   gap: clamp(8px, 2vh, 24px);
 }
 
-/* ───────────── Titre courant ───────────── */
+/* ───────────── Repères de grille (trois colonnes, deux horizontales) ───────────── */
+.guides {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+  color: var(--guide);
+  transition: color 0.9s var(--ease);
+}
+.guides-col {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: calc(var(--gutter) + (100% - 2 * var(--gutter)) * var(--i) / 3);
+  width: 1px;
+  background: currentColor;
+}
+.guides-row {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: currentColor;
+}
+.guides-row--a { top: 33.2%; }
+.guides-row--b { top: 68.7%; }
+/* Petites croix aux intersections. */
+.guides-cross {
+  position: absolute;
+  width: 11px;
+  height: 11px;
+  margin: -5px 0 0 -5px;
+  left: calc(var(--gutter) + (100% - 2 * var(--gutter)) * var(--i) / 3);
+  color: var(--fg-3);
+  opacity: 0.55;
+}
+.guides-cross::before, .guides-cross::after { content: ""; position: absolute; background: currentColor; }
+.guides-cross::before { left: 5px; top: 0; width: 1px; height: 11px; }
+.guides-cross::after { top: 5px; left: 0; height: 1px; width: 11px; }
+
+/* ───────────── En-tête ───────────── */
 .runner {
-  position: absolute; inset: 0 var(--gutter) auto;
+  position: absolute;
+  inset: 36px var(--gutter) auto;
   z-index: 5;
-  height: var(--runner);
   display: grid;
-  grid-template-columns: 1fr auto 1fr;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   align-items: center;
-  border-bottom: 1px solid var(--rule);
-  font-family: var(--grotesk);
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.16em;
+  padding: 0 var(--pad);
+  font-family: var(--pixel);
+  font-size: 12px;
+  line-height: 16px;
   text-transform: uppercase;
-  color: var(--fg-2);
-  transition: color 0.9s var(--ease), border-color 0.9s var(--ease);
+  color: var(--fg);
+  transition: color 0.9s var(--ease), opacity 0.5s;
 }
 .runner-mast {
   justify-self: start;
   font-family: var(--display);
-  font-size: 22px;
-  font-weight: 800;
-  letter-spacing: 0.02em;
-  text-transform: none;
+  font-size: 24px;
+  font-weight: 700;
+  font-stretch: var(--wide);
+  line-height: 1;
+  letter-spacing: -0.005em;
+  text-transform: uppercase;
   color: var(--fg);
   text-decoration: none;
   transition: color 0.9s var(--ease);
 }
-.runner-date { justify-self: end; }
+.runner-issue { justify-self: start; padding-left: var(--pad); color: var(--fg-2); }
+.runner-date { justify-self: end; color: var(--fg-2); }
 .deck.is-cover .runner { opacity: 0; pointer-events: none; }
-.runner { transition: color 0.9s var(--ease), border-color 0.9s var(--ease), opacity 0.5s; }
 
-/* ───────────── Folio ───────────── */
+/* ───────────── HUD ───────────── */
 .folio {
-  position: absolute; inset: auto var(--gutter) 0;
+  position: absolute;
+  inset: auto var(--gutter) 36px;
   z-index: 5;
-  height: var(--folio);
   display: grid;
-  grid-template-columns: auto 1fr auto;
-  align-items: center;
-  gap: clamp(12px, 2vw, 32px);
-  border-top: 1px solid var(--rule);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: end;
+  padding: 0 var(--pad);
+  font-family: var(--pixel);
+  font-size: 12px;
+  line-height: 16px;
+  text-transform: uppercase;
   color: var(--fg);
-  transition: color 0.9s var(--ease), border-color 0.9s var(--ease);
+  transition: color 0.9s var(--ease);
 }
-.folio-page { font-family: var(--display); font-size: 30px; font-weight: 500; font-style: italic; line-height: 1; }
-.folio-page span { font-size: 15px; margin-right: 3px; color: var(--fg-3); }
-.folio-chapter { min-width: 0; display: flex; flex-direction: column; gap: 2px; }
-.folio-chapter small { font-family: var(--grotesk); font-size: 10px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--fg-3); }
-.folio-chapter strong { font-family: var(--text); font-size: 15px; font-weight: 500; font-style: italic; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.folio-controls { display: flex; align-items: center; gap: clamp(10px, 1.4vw, 20px); }
+.folio-page {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  min-width: 0;
+  font-family: var(--mono);
+  font-size: 16px;
+  line-height: 24px;
+  font-variant-numeric: tabular-nums;
+}
+.folio-page span { font-family: var(--pixel); font-size: 12px; color: var(--fg-3); }
+.folio-chapter { min-width: 0; display: flex; flex-direction: column; gap: 2px; padding-left: var(--pad); }
+.folio-chapter small { font-size: 12px; color: var(--fg-3); }
+.folio-chapter strong { font-weight: 400; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.folio-controls { display: flex; align-items: center; justify-content: flex-end; gap: clamp(12px, 1.6vw, 24px); }
 .folio-btn {
-  font-family: var(--grotesk);
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.14em;
+  font-family: var(--pixel);
+  font-size: 12px;
+  line-height: 24px;
   text-transform: uppercase;
   color: var(--fg-2);
-  padding: 6px 0;
+  white-space: nowrap;
+  /* Le soulignement se trace depuis la gauche. */
   background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat;
   transition: color 0.2s, background-size 0.3s var(--ease);
 }
 .folio-btn:hover:not(:disabled) { color: var(--fg); background-size: 100% 1px; }
 .folio-btn:disabled { opacity: 0.35; cursor: default; }
 .folio-arrow {
-  width: 40px; height: 40px;
-  display: grid; place-items: center;
-  border: 1px solid var(--fg);
-  border-radius: 50%;
+  min-width: 24px;
+  height: 32px;
+  padding: 0 12px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--rule);
+  border-radius: 99px;
+  font-family: var(--pixel);
   font-size: 16px;
-  transition: background 0.2s, color 0.2s;
+  transition: background 0.2s, color 0.2s, border-color 0.2s, transform 0.2s var(--ease);
 }
-.folio-arrow:last-child { background: var(--fg); color: var(--bg); }
-.folio-arrow:hover:not(:disabled) { background: var(--accent); border-color: var(--accent); color: var(--bg); }
+.folio-arrow:last-child { background: var(--fg); border-color: var(--fg); color: var(--bg); }
+.folio-arrow:hover:not(:disabled) { transform: translateY(-2px) rotate(-2deg); border-color: var(--fg); }
 .folio-arrow:disabled { opacity: 0.25; cursor: default; }
-.folio-progress { position: absolute; left: 0; right: 0; top: -1px; height: 2px; background: var(--accent); transform-origin: 0 50%; }
+/* Axe de progression : filet de 1 px, remplissage lime de 3 px depuis la gauche. */
+.folio-track { position: absolute; left: var(--pad); right: var(--pad); top: -18px; height: 1px; background: var(--rule); }
+.folio-progress { position: absolute; left: var(--pad); right: var(--pad); top: -19px; height: 3px; background: var(--lime); transform-origin: 0 50%; }
 
 /* ───────────── Sommaire (index) ───────────── */
 .index {
   width: min(720px, calc(100vw - 32px));
   max-height: min(86vh, 860px);
   padding: 0;
-  border: 0;
-  background: #f2ece1;
-  color: #1a1612;
-  box-shadow: 0 40px 80px -30px rgb(0 0 0 / 0.6);
+  border: 1px solid rgb(54 54 48 / 0.12);
+  background: #fbfaf4;
+  color: #000;
 }
 .index[open] { display: flex; flex-direction: column; animation: index-in 0.45s var(--ease); }
-.index::backdrop { background: rgb(20 18 16 / 0.6); }
-@keyframes index-in { from { opacity: 0; transform: translateY(14px); } }
-.index header { display: flex; align-items: baseline; gap: 14px; padding: 22px 26px 14px; border-bottom: 2px solid #1a1612; }
-.index header strong { font-family: var(--display); font-size: 34px; font-weight: 500; font-style: italic; }
-.index header span { font-family: var(--grotesk); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: #8a8073; flex: 1; }
-.index header button { font-size: 26px; line-height: 1; }
-.index ol { list-style: none; margin: 0; padding: 10px 26px 16px; overflow-y: auto; }
+.index::backdrop { background: rgb(13 12 11 / 0.6); }
+@keyframes index-in { from { opacity: 0; transform: translateY(12px); } }
+.index header { display: flex; align-items: baseline; gap: 14px; padding: 24px 24px 16px; border-bottom: 1px solid rgb(54 54 48 / 0.12); }
+.index header strong { font-family: var(--display); font-size: 32px; font-weight: 700; font-stretch: var(--wide); line-height: 1; text-transform: uppercase; }
+.index header span { flex: 1; font-family: var(--pixel); font-size: 12px; text-transform: uppercase; color: #6b6b63; }
+.index header button { font-family: var(--pixel); font-size: 24px; line-height: 1; }
+.index ol { list-style: none; margin: 0; padding: 8px 24px 16px; overflow-y: auto; }
 .index li.is-part { margin-top: 12px; }
-.index li button { width: 100%; display: flex; align-items: baseline; gap: 8px; padding: 6px 0; font-size: 17px; }
-.index li.is-part button { font-weight: 600; }
-.index li button:hover .index-chapter, .index li button[aria-current] .index-chapter { color: #8c2f22; }
-.index-dots { flex: 1; border-bottom: 1px dotted rgb(26 22 18 / 0.4); transform: translateY(-4px); }
-.index-page { font-family: var(--display); font-style: italic; }
-.index p { margin: 0; padding: 12px 26px; border-top: 1px solid rgb(26 22 18 / 0.2); font-family: var(--grotesk); font-size: 11px; color: #8a8073; }
-kbd { font-family: var(--mono); font-size: 11px; padding: 1px 5px; border: 1px solid rgb(26 22 18 / 0.3); }
+.index li button { width: 100%; display: flex; align-items: baseline; gap: 8px; padding: 6px 0; font-size: 16px; line-height: 24px; }
+.index li.is-part button { font-weight: 700; }
+.index li button:hover .index-chapter,
+.index li button[aria-current] .index-chapter { background: var(--lime); }
+.index-dots { flex: 1; border-bottom: 1px dotted rgb(54 54 48 / 0.32); transform: translateY(-4px); }
+.index-page { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+.index p { margin: 0; padding: 12px 24px; border-top: 1px solid rgb(54 54 48 / 0.12); font-family: var(--pixel); font-size: 12px; text-transform: uppercase; color: #6b6b63; }
+kbd { font-family: var(--pixel); font-size: 12px; padding: 0 4px; background: var(--lime); color: #000; }
 
 @media (max-width: 900px) {
-  :root { --runner: 46px; --folio: 58px; }
-  .runner { grid-template-columns: auto 1fr; }
-  .runner-issue { justify-self: end; }
+  :root { --runner: 64px; --folio: 72px; }
+  .runner { grid-template-columns: auto 1fr; inset: 24px var(--gutter) auto; }
+  .runner-issue { justify-self: end; max-width: 100%; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
   .runner-date { display: none; }
+  .folio { grid-template-columns: auto 1fr auto; inset: auto var(--gutter) 24px; gap: 12px; }
   .folio-btn--hide-s { display: none; }
+  .guides-row, .guides-cross { display: none; }
+  /* Sur mobile, la page défile : l’en-tête et le HUD gardent un fond pour rester lisibles. */
+  .runner::before,
+  .folio::before {
+    content: "";
+    position: absolute;
+    left: calc(-1 * var(--gutter));
+    right: calc(-1 * var(--gutter));
+    z-index: -1;
+    pointer-events: none;
+  }
+  .runner::before { top: -24px; bottom: -16px; background: linear-gradient(to top, transparent, var(--bg) 40%); }
+  .folio::before { top: -32px; bottom: -24px; background: linear-gradient(to bottom, transparent, var(--bg) 35%); }
 }
-@media (max-width: 560px) {
-  .runner-issue { font-size: 9px; letter-spacing: 0.1em; }
+@media (max-width: 760px) {
   .folio-chapter small { display: none; }
   .folio-controls .folio-btn { display: none; }
 }

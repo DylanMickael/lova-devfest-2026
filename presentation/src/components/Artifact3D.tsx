@@ -50,7 +50,8 @@ function Sculpture({ mode, reduced }: { mode: Mode; reduced: boolean }) {
     <group ref={group}>
       {mode === "showcase" ? (
         <mesh geometry={geo}>
-          <meshPhysicalMaterial color="#6e3420" roughness={0.42} metalness={0.05} clearcoat={0.7} clearcoatRoughness={0.25} sheen={0.6} sheenColor="#e7b98a" />
+          {/* Matière « ballon » de DESIGN.md : brillante, gonflée, en terre cuite lamba. */}
+          <meshPhysicalMaterial color="#b4472a" roughness={0.2} metalness={0} clearcoat={1} clearcoatRoughness={0.06} sheen={0.35} sheenColor="#ffe8be" />
         </mesh>
       ) : (
         <>
@@ -59,14 +60,14 @@ function Sculpture({ mode, reduced }: { mode: Mode; reduced: boolean }) {
           </points>
           <mesh ref={laser} rotation={[-Math.PI / 2, 0, 0]}>
             <ringGeometry args={[0.36, 0.38, 96]} />
-            <meshBasicMaterial color="#ff6a4d" transparent opacity={0.95} side={THREE.DoubleSide} />
+            <meshBasicMaterial color="#c0fe04" transparent opacity={0.95} side={THREE.DoubleSide} />
           </mesh>
         </>
       )}
       <mesh position={[0, -1.47, 0]}>
         <cylinderGeometry args={[0.95, 1.02, 0.28, 64]} />
         {mode === "showcase"
-          ? <meshStandardMaterial color="#1b1714" roughness={0.6} />
+          ? <meshPhysicalMaterial color="#000000" roughness={0.3} clearcoat={0.6} />
           : <meshBasicMaterial color="#f0c58a" wireframe transparent opacity={0.18} />}
       </mesh>
     </group>

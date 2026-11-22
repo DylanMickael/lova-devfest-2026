@@ -1,72 +1,134 @@
 /*
- * LOVA — numéro spécial. Jetons d’imprimerie.
- * Quatre papiers : ivoire (paper), sable (sand), encre (ink), lie-de-vin (wine).
- * Chaque page déclare son papier via data-tone ; la coque suit la page courante.
+ * LOVA — numéro spécial, dans le système visuel de DESIGN.md (site LOVA).
+ * Quatre fonds : papier (paper), ciel (sand), galerie (ink), indigo (wine).
+ * Chaque page déclare son fond via data-tone ; la coque suit la page courante.
+ * Un seul accent, le lime, pour pointer : surlignage, progression, focus.
  */
 
+@font-face {
+  font-family: "TikTok Sans";
+  font-style: normal;
+  font-weight: 300 900;
+  font-stretch: 75% 150%;
+  font-display: swap;
+  src: url("../assets/fonts/TikTokSans-Variable.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Departure Mono";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("../assets/fonts/DepartureMono-Regular.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Geist Mono";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("../assets/fonts/GeistMono-Variable.woff2") format("woff2");
+}
+
 :root {
-  --display: "Bodoni Moda", "Didot", "Bodoni 72", serif;
-  --grotesk: "Archivo", "Helvetica Neue", Arial, sans-serif;
-  --text: "Newsreader", Georgia, serif;
-  --mono: "IBM Plex Mono", ui-monospace, monospace;
+  /* Titres et texte : TikTok Sans. Interface : Departure Mono. Données : Geist Mono. */
+  --display: "TikTok Sans", "Helvetica Neue", Arial, sans-serif;
+  --grotesk: "TikTok Sans", "Helvetica Neue", Arial, sans-serif;
+  --text: "TikTok Sans", "Helvetica Neue", Arial, sans-serif;
+  --pixel: "Departure Mono", ui-monospace, monospace;
+  --mono: "Geist Mono", ui-monospace, monospace;
 
-  --runner: 52px;
-  --folio: 64px;
-  --gutter: clamp(16px, 4vw, 72px);
-  --ease: cubic-bezier(0.77, 0, 0.18, 1);
+  --lime: #c0fe04;
+  --on-lime: #000;
+  --wide: 120%;
 
-  /* Grain d’impression : une tuile statique, aucun mélange de calques. */
-  --grain-img: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.5 0 0 0 0 0.45 0 0 0 0 0.4 0 0 0 0.55 0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E");
+  --runner: 72px;
+  --folio: 80px;
+  /* Marge latérale et retrait de texte de la grille à trois colonnes. */
+  --gutter: clamp(16px, 4.36vw, 72px);
+  --pad: 8px;
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-io: cubic-bezier(0.65, 0, 0.35, 1);
+
+  /* Palette lamba : illustration et petites marques, jamais le texte ni les actions. */
+  --lamba-indigo: #1f2a5c;
+  --lamba-terracotta: #b4472a;
+  --lamba-ochre: #d99a2b;
+  --lamba-green: #6c8f4e;
+  --lamba-sand: #e9dcc0;
+  --lamba-wood: #3b2a20;
+
+  --grain-img: none;
 }
 
+/* Fond clair : papier. */
 [data-tone="paper"] {
-  --bg: #f2ece1;
-  --fg: #1a1612;
-  --fg-2: #4d453c;
-  --fg-3: #8a8073;
-  --rule: rgb(26 22 18 / 0.2);
-  --accent: #8c2f22;
-  --accent-2: #a9783a;
-  --ok: #2f6b4a; --warn: #93650f; --ko: #a3342a;
-  --grain: 0.16;
+  --bg: #fbfaf4;
+  --bg-image: none;
+  --bg-elev: #efede7;
+  --fg: #000;
+  --fg-2: rgb(54 54 48 / 0.6);
+  --fg-3: #6b6b63;
+  --rule: rgb(54 54 48 / 0.12);
+  --guide: rgb(54 54 48 / 0.08);
+  /* Mot d’accent : noir surligné de lime. */
+  --accent: #000;
+  --mark: var(--lime);
+  --accent-2: #000;
+  --ok: var(--lamba-green); --warn: var(--lamba-ochre); --ko: var(--lamba-terracotta);
+  --grain: 0;
 }
+/* Fond clair : ciel du site, du bas vers le haut. */
 [data-tone="sand"] {
-  --bg: #e3d3b8;
-  --fg: #1c150f;
-  --fg-2: #4a3d2f;
-  --fg-3: #7d6b56;
-  --rule: rgb(28 21 15 / 0.24);
-  --accent: #7a2518;
-  --accent-2: #5b4326;
-  --ok: #2b6244; --warn: #7d540a; --ko: #96291f;
-  --grain: 0.2;
+  --bg: #c4e0f4;
+  --bg-image: linear-gradient(0deg, #cce6f6, #b8daf1);
+  --bg-elev: #e3f0f9;
+  --fg: #000;
+  --fg-2: rgb(20 36 52 / 0.66);
+  --fg-3: rgb(20 36 52 / 0.58);
+  --rule: rgb(20 36 52 / 0.16);
+  --guide: rgb(20 36 52 / 0.1);
+  --accent: #000;
+  --mark: var(--lime);
+  --accent-2: #000;
+  --ok: #3e6a2a; --warn: #8a5a0c; --ko: var(--lamba-terracotta);
+  --grain: 0;
 }
+/* Fond sombre : galerie, sous un projecteur chaud. */
 [data-tone="ink"] {
-  --bg: #141210;
-  --fg: #efe7da;
-  --fg-2: #c2b8a8;
-  --fg-3: #877d6f;
-  --rule: rgb(239 231 218 / 0.18);
-  --accent: #d9a866;
-  --accent-2: #c8553f;
-  --ok: #8fc7a0; --warn: #e6b961; --ko: #f08b78;
-  --grain: 0.1;
+  --bg: #0d0c0b;
+  --bg-image: radial-gradient(70% 60% at 72% 30%, rgb(255 232 190 / 0.11), transparent 70%);
+  --bg-elev: #191b1b;
+  --fg: rgb(243 239 230);
+  --fg-2: rgb(243 239 230 / 0.78);
+  --fg-3: rgb(243 239 230 / 0.45);
+  --rule: rgb(243 239 230 / 0.14);
+  --guide: rgb(243 239 230 / 0.07);
+  /* Sur fond sombre, le mot d’accent est écrit en lime. */
+  --accent: var(--lime);
+  --mark: transparent;
+  --accent-2: rgb(243 239 230 / 0.78);
+  --ok: #a8d08a; --warn: #f2c66b; --ko: #f09a80;
+  --grain: 0;
 }
+/* Fond sombre : indigo des boucles d’artisanat. */
 [data-tone="wine"] {
-  --bg: #5a1c15;
-  --fg: #f4e6d4;
-  --fg-2: #e2c8b0;
-  --fg-3: #bb957b;
-  --rule: rgb(244 230 212 / 0.26);
-  --accent: #f0c58a;
-  --accent-2: #f4e6d4;
-  --ok: #b7e0c1; --warn: #f5d08a; --ko: #ffb4a3;
-  --grain: 0.12;
+  --bg: #1f2a5c;
+  --bg-image: none;
+  --bg-elev: #28346b;
+  --fg: rgb(243 239 230);
+  --fg-2: rgb(243 239 230 / 0.78);
+  --fg-3: rgb(243 239 230 / 0.6);
+  --rule: rgb(243 239 230 / 0.2);
+  --guide: rgb(243 239 230 / 0.09);
+  --accent: var(--lime);
+  --mark: transparent;
+  --accent-2: rgb(243 239 230 / 0.78);
+  --ok: #b7e0a1; --warn: #f5d08a; --ko: #ffb4a3;
+  --grain: 0;
 }
 
 * { box-sizing: border-box; }
 html, body, #root { width: 100%; height: 100%; margin: 0; }
-html { background: #141210; }
+html { background: #0d0c0b; }
 body {
   overflow: hidden;
   font-family: var(--text);
@@ -77,6 +139,11 @@ body {
 }
 button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; text-align: inherit; }
 svg { display: block; }
-:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
-::selection { background: var(--accent); color: var(--bg); }
+:focus-visible { outline: 2px solid var(--lime); outline-offset: 3px; }
+::selection { background: var(--lime); color: #000; }
 .mono { font-family: var(--mono); }
+.pixel { font-family: var(--pixel); text-transform: uppercase; letter-spacing: 0; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0s !important; transition-duration: 0s !important; }
+}

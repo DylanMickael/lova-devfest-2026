@@ -35,11 +35,11 @@ export function sampleHex(label: string, length = 64): string {
 
 export const shortHex = (hex: string, head = 6, tail = 4) => `${hex.slice(0, head)}…${hex.slice(-tail)}`;
 
-/** Palette des tissages : vin, terre, or, ivoire, encre, indigo. */
+/** Palette lamba de DESIGN.md (indigo, terre cuite, ocre, vert, sable, bois), avec le papier et le noir. */
 export const WEAVE_PALETTES = [
-  ["#67271f", "#c8a174", "#f0ece4", "#0e1116", "#b5523b"],
-  ["#1d2a44", "#c8a174", "#e9dcc3", "#7e2a20", "#0e1116"],
-  ["#3a2416", "#d9a65a", "#f3e6cf", "#5b6b3a", "#0e1116"],
-  ["#2b1530", "#e2b07a", "#f0ece4", "#a8432f", "#13161c"],
-  ["#0f2a2a", "#c8a174", "#efe3cc", "#7e2a20", "#0b0d10"],
+  ["#1f2a5c", "#d99a2b", "#e9dcc0", "#b4472a", "#000000"],
+  ["#b4472a", "#e9dcc0", "#1f2a5c", "#d99a2b", "#3b2a20"],
+  ["#3b2a20", "#d99a2b", "#fbfaf4", "#6c8f4e", "#000000"],
+  ["#6c8f4e", "#e9dcc0", "#3b2a20", "#b4472a", "#fbfaf4"],
+  ["#000000", "#d99a2b", "#e9dcc0", "#1f2a5c", "#b4472a"],
 ] as const;

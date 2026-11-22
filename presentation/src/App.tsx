@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState, type CSSProperties } from "react";
 import { AnimatePresence, motion, type Variants } from "motion/react";
 import { isSoundOn, onSoundChange, setSound, unlockAudio, whoosh } from "./deck/sfx";
 import { ISSUE } from "./deck/content";
@@ -7,7 +7,22 @@ import { slides } from "./slides";
 const total = slides.length;
 const pad = (n: number) => String(n).padStart(2, "0");
 const ROMAN = ["", "I", "II", "III", "IV"];
-const TONE_COLOR = { paper: "#f2ece1", sand: "#e3d3b8", ink: "#141210", wine: "#5a1c15" } as const;
+const TONE_COLOR = { paper: "#fbfaf4", sand: "#cce6f6", ink: "#0d0c0b", wine: "#1f2a5c" } as const;
+
+/** Repères de la grille DESIGN.md : quatre verticales, deux horizontales, des croix aux croisements. */
+function Guides() {
+  const cols = [0, 1, 2, 3];
+  return (
+    <div className="guides" aria-hidden="true">
+      {cols.map(i => <i key={i} className="guides-col" style={{ "--i": i } as CSSProperties} />)}
+      <i className="guides-row guides-row--a" />
+      <i className="guides-row guides-row--b" />
+      {["33.2%", "68.7%"].flatMap(top => cols.map(i => (
+        <i key={`${top}-${i}`} className="guides-cross" style={{ top, "--i": i } as CSSProperties} />
+      )))}
+    </div>
+  );
+}
 
 /*
  * Tourne-page : la nouvelle page balaie l’ancienne dans le sens de lecture,
@@ -123,6 +138,8 @@ export default function App() {
         </AnimatePresence>
       </div>
 
+      <Guides />
+
       <header className="runner">
         <a className="runner-mast" href="#1" onClick={e => { e.preventDefault(); go(0); }} aria-label="Retour à la une">{ISSUE.name}</a>
         <span className="runner-issue">{ISSUE.number} · Numéro spécial {ISSUE.event}</span>
@@ -144,6 +161,7 @@ export default function App() {
           <button type="button" className="folio-arrow" onClick={() => go(active - 1)} disabled={active === 0} aria-label="Page précédente">←</button>
           <button type="button" className="folio-arrow" onClick={() => go(active + 1)} disabled={active === total - 1} aria-label="Page suivante">→</button>
         </div>
+        <i className="folio-track" aria-hidden="true" />
         <motion.i className="folio-progress" aria-hidden="true" initial={false} animate={{ scaleX: (active + 1) / total }} transition={{ duration: instant ? 0 : 0.9, ease: turnEase }} />
       </footer>
 

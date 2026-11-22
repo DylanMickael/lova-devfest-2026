@@ -95,7 +95,7 @@ export function BackCover({ instant }: SceneProps) {
         <p className="back-motto" data-split="lines" data-at="1.2">Découvrir le patrimoine. Le faire vivre. <em>Le transmettre.</em></p>
         <Rule at={1.6} />
         <div className="colophon" data-in="fade" data-at="1.8">
-          <p><b>Colophon.</b> Composé en Bodoni Moda, Archivo, Newsreader et IBM Plex Mono. Réalisé avec React, GSAP et Three.js.</p>
+          <p><b>Colophon.</b> Composé en TikTok Sans, Departure Mono et Geist Mono, selon le DESIGN.md de LOVA. Réalisé avec React, GSAP et Three.js.</p>
           <p>Visuels génératifs : aucune image patrimoniale n’est reproduite tant que ses droits ne sont pas validés. Les références de token sont des spécimens.</p>
         </div>
         <div className="back-foot" data-in="fade" data-at="2">
