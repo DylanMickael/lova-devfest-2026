@@ -10,19 +10,6 @@ export const ISSUE = {
   date: "Novembre 2026",
 };
 
-/** Pages clés (numérotation à partir de 1) — à tenir alignées avec slides/index.ts. */
-export const PAGE = {
-  constat: 5,
-  experience: 7,
-  handoff: 10,
-  confiance: 11,
-  provenance: 13,
-  myths: 14,
-  plateforme: 15,
-  team: 18,
-  thanks: 21,
-} as const;
-
 export const TEAM = [
   { handle: "endy-rkt", role: "Gateway, MVP & architecture système" },
   { handle: "papangoo", role: "Contenus, médias & vérification" },

@@ -117,7 +117,7 @@ export default function App() {
   const Scene = current.Scene;
 
   return (
-    <main className={`deck ${instant ? "is-still" : ""} ${active === 0 ? "is-cover" : ""}`} data-tone={current.tone} aria-label={`${ISSUE.name} — numéro spécial ${ISSUE.event}`}
+    <main className={`deck ${instant ? "is-still" : ""} ${current.cover ? "is-cover" : ""}`} data-tone={current.tone} aria-label={`${ISSUE.name} — numéro spécial ${ISSUE.event}`}
       onTouchStart={e => {
         const p = e.touches[0];
         touch.current = p && !(e.target instanceof HTMLElement && e.target.closest("dialog")) ? { x: p.clientX, y: p.clientY } : null;

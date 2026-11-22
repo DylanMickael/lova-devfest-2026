@@ -1,7 +1,7 @@
 # LOVA — Numéro spécial DevFest 2026
 
-Présentation interactive du projet **LOVA — L’héritage malagasy prend vie** (DevFest 2026, hackathon *Preserving the Art*), composée comme un magazine : une, édito, sommaire, ouvertures de partie, reportage, enquête, ours, quatrième de couverture.
-Le contenu reprend la documentation du dépôt `devfest2026` : README, MVP, architecture et service NFT.
+Pitch interactif du projet **LOVA — L’héritage malagasy prend vie** (DevFest 2026, hackathon *Preserving the Art*), en neuf pages : 1. « L’art est mort » — ou pas ? ; 2. le contexte (480 000+ artisans et artistes) ; 3. la problématique ; 4. LOVA, la couverture ; 5. comment ça marche (IA, réalité augmentée, blockchain) ; 6. les outils ; 7. l’architecture en un diagramme ; 8. le business plan ; 9. merci et l’équipe.
+Le contenu reprend la documentation du dépôt `devfest2026` : README, MVP, architecture et service NFT. Le business plan est une projection de travail, à valider avec les premiers partenaires.
 
 - **En ligne (serveur)** : https://lova.132-145-17-50.sslip.io/
 - **Miroir GitHub Pages** : https://dylanmickael.github.io/lova-devfest-2026/
@@ -26,7 +26,7 @@ npm run build      # tsc + build de production dans presentation/dist/
 | `M` | Bruitages on/off |
 | `F` | Plein écran |
 
-On peut aussi naviguer par balayage tactile. L’URL `#n` ouvre la page *n*. Les titres de la une, du sommaire et des ouvertures de partie sont cliquables.
+On peut aussi naviguer par balayage tactile. L’URL `#n` ouvre la page *n*. Les rubriques de la couverture (page 4) mènent aux pages correspondantes.
 
 ## Direction artistique
 
@@ -37,20 +37,22 @@ Le numéro suit le [`DESIGN.md`](https://github.com/songomby-D1/devfest2026/blob
 - **Typographies** (OFL, auto-hébergées en WOFF2) : TikTok Sans pour les titres (700, largeur 120, capitales) et le texte, Departure Mono pour l’interface (en-tête, HUD, surtitres, étiquettes), Geist Mono pour les chiffres et les données.
 - **Grille** : trois colonnes à marge `clamp(16px, 4.36vw, 72px)`, repères visibles et deux horizontales à 33,2 % et 68,7 % avec des croix aux croisements. Interface plate, filets de 1 px ; la profondeur va aux œuvres.
 - **Motion** : le tourne-page est un balayage `clip-path` ; les titres montent ligne à ligne (1,2 s, 80 ms de décalage, `cubic-bezier(.22, 1, .36, 1)`), les paragraphes montent de 12 px. `prefers-reduced-motion` rend tout instantané.
-- **Visuels** : motifs tissés génératifs dans la palette lamba et statuette 3D procédurale en matière « ballon ». Aucune image patrimoniale n’est reproduite tant que ses droits ne sont pas validés. Les références de token sont des spécimens étiquetés.
+- **Visuels** : œuvres malagasy du domaine public ou CC0 (Wikimedia Commons), créditées là où elles apparaissent : aloalo mahafaly (page 1), couple sakalava du Metropolitan Museum of Art (page 2), portraits de Ranavalona Ire, Radama II et Ranavalona II (page 3), *Andrianampoinimerina* et *Radama Ier* de Philippe-Auguste Ramanankirahina (1860–1915) en couverture. Ailleurs, des motifs tissés génératifs en palette lamba et une statuette 3D procédurale. Les références de token sont des spécimens étiquetés.
+- **Export PDF** : `exports/LOVA-DevFest-2026.pdf`, une capture par page en 16:9, animations à leur état final.
 
 ## Code
 
 ```
 presentation/src/
   App.tsx                 Coque : tourne-page, titre courant, folio, sommaire, clavier et tactile
-  deck/                   Chorégraphie GSAP déclarative (data-*), bruitages Web Audio, contenus, types
+  deck/                   Chorégraphie GSAP déclarative (data-*), bruitages Web Audio, contenus, œuvres et crédits, types
   components/
     Primitives.tsx        Stage, surtitre, titre, chapô, légende, filet
     Print.tsx             Code-barres, tampon, fiche de lot (NFT présenté comme un lot de catalogue)
     GenArt.tsx            Motifs tissés génératifs, déterministes
     Artifact3D.tsx        Statuette procédurale React Three Fiber (vitrine ou scan LiDAR), chargée à la demande
-  slides/                 Une scène par page, regroupées par partie ; index.ts fixe la pagination
+  slides/                 Pitch.tsx : les neuf scènes du pitch ; index.ts fixe la pagination
+  assets/                 Polices de marque (OFL) et œuvres reproduites (WebP)
   styles/                 base (papiers, polices), chrome (coque), editorial (composants), pages
 ```
 

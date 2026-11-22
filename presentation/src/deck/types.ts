@@ -17,4 +17,6 @@ export type SlideDef = {
   part: 0 | 1 | 2 | 3 | 4;
   tone: Tone;
   Scene: (props: SceneProps) => ReactNode;
+  /** La couverture masque l’en-tête : la manchette en tient lieu. */
+  cover?: boolean;
 };
