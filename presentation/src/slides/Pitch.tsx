@@ -395,7 +395,7 @@ export function Thanks({ instant }: SceneProps) {
         <dl className="team-list">
           {TEAM.map((m, i) => (
             <div key={m.name} data-in="up" data-at={1.2 + i * 0.1}>
-              <dt>{m.name}</dt>
+              <dt><span className="team-first">{m.name}</span><span className="team-last">{m.surname}</span></dt>
               <dd>{m.role}</dd>
             </div>
           ))}

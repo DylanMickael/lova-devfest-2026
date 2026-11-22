@@ -11,9 +11,9 @@ export const ISSUE = {
 };
 
 export const TEAM = [
-  { name: "Dylan", role: "Marketing" },
-  { name: "Flavien", role: "Développement backend" },
-  { name: "Rajo", role: "Développement frontend" },
-  { name: "Gaël", role: "Blockchain et infrastructure" },
-  { name: "Ryan", role: "Développement IA" },
+  { name: "Dylan", surname: "Rakotonarivo", role: "Marketing" },
+  { name: "Flavien", surname: "Tsiriherivonjy", role: "Développement backend" },
+  { name: "Rajo", surname: "Randriatseheno", role: "Développement frontend" },
+  { name: "Gaëls", surname: "Fitahiantsoa", role: "Blockchain et infrastructure" },
+  { name: "Ryan", surname: "Rasoarimanana", role: "Développement IA" },
 ] as const;

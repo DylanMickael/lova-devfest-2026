@@ -182,7 +182,9 @@
 .team-label { margin: clamp(4px, 1vh, 12px) 0 -4px; font-family: var(--pixel); font-size: 12px; line-height: 16px; text-transform: uppercase; color: var(--fg-2); }
 .team-list { margin: 0; border-top: 1px solid var(--fg); }
 .team-list div { display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); gap: 16px; align-items: baseline; padding: clamp(6px, 1.3vh, 12px) 0; border-bottom: 1px solid var(--rule); }
-.team-list dt { font-family: var(--display); font-weight: 700; font-stretch: var(--wide); text-transform: uppercase; font-size: clamp(18px, min(1.8vw, 3.4vh), 28px); line-height: 1; }
+.team-list dt { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 12px; }
+.team-first { font-family: var(--display); font-weight: 700; font-stretch: var(--wide); text-transform: uppercase; font-size: clamp(18px, min(1.8vw, 3.4vh), 28px); line-height: 1; }
+.team-last { font-family: var(--mono); font-size: 14px; line-height: 20px; text-transform: uppercase; color: var(--fg-2); }
 .team-list dd { margin: 0; font-size: 14px; line-height: 20px; color: var(--fg-2); }
 .thanks-credits { margin: 0; font-size: 11px; line-height: 16px; color: var(--fg-3); max-width: 70ch; }
 
