@@ -1,121 +1,105 @@
-import { GenArt } from "../components/GenArt";
 import { sampleHex } from "../components/genart";
-import { Eyebrow, Icon, Lead, Stage, Title } from "../components/Primitives";
-import { TokenCard } from "../components/TokenCard";
+import { Headline, Kicker, Rule, Stage, Standfirst } from "../components/Primitives";
+import { Certificate } from "../components/Print";
 import type { SceneProps } from "../deck/types";
 
 /* ───────────── Revue humaine ───────────── */
 
-const SIGNALS = ["Incohérence entre média et fiche", "Indice de contenu généré", "Métadonnées suggérées"];
-const CHECKS = ["Cohérence média / fiche", "Attribution & crédits", "Provenance déclarée", "Droits de publication"];
+const COLUMNS = [
+  { title: "Ce que la machine signale", items: ["Une incohérence entre le média et la fiche", "Un indice de contenu généré", "Des métadonnées suggérées"], note: "Des signaux incertains, jamais un verdict." },
+  { title: "Ce que vérifie le relecteur", items: ["La cohérence entre média et fiche", "L’attribution et les crédits", "La provenance déclarée", "Les droits de publication"], note: "Il consigne les preuves, les affirmations et sa décision." },
+  { title: "Le statut de chaque affirmation", items: ["Vérifié", "Incertain", "Non revu"], note: "Une suggestion automatique ne change jamais un statut." },
+];
 
 export function Review({ instant, no }: SceneProps) {
   return (
-    <Stage instant={instant} className="s-review">
-      <div className="review-head">
-        <Eyebrow no={no} label="Confiance · Revue des contributions" />
-        <Title lines={["L’IA signale."]} accent="L’humain décide." />
+    <Stage instant={instant} className="p-review">
+      <Kicker no={no}>La confiance · Revue des contributions</Kicker>
+      <blockquote className="pullquote" data-split="lines" data-at="0.2">« L’IA signale. <em>L’humain décide. »</em></blockquote>
+      <Rule at={0.9} strong />
+      <div className="review-cols">
+        {COLUMNS.map((c, i) => (
+          <section key={c.title} data-in="up" data-at={1 + i * 0.14}>
+            <h2>{c.title}</h2>
+            <ul className={i === 2 ? "statuses" : ""}>{c.items.map(it => <li key={it}>{it}</li>)}</ul>
+            <p>{c.note}</p>
+          </section>
+        ))}
       </div>
-      <div className="review-board">
-        <div className="review-col">
-          <span className="col-label mono" data-in="fade" data-at="0.7">Signaux automatiques · incertains</span>
-          {SIGNALS.map((s, i) => <span key={s} className="signal" data-in="left" data-at={0.8 + i * 0.12}><Icon name="spark" size={16} />{s}</span>)}
-        </div>
-
-        <svg className="review-wires" viewBox="0 0 200 300" preserveAspectRatio="none" aria-hidden="true" data-draw data-at="1.2" data-dur="1">
-          <path d="M0 60 C100 60, 100 150, 200 150" /><path d="M0 150 H200" /><path d="M0 240 C100 240, 100 150, 200 150" />
-        </svg>
-
-        <article className="reviewer glass glass--edge" data-in="scale" data-at="1.3" data-sfx="blip">
-          <header><span className="reviewer-avatar"><Icon name="user" size={22} /></span><div><strong>Relecteur habilité</strong><span className="mono">Preuves · affirmations · décision</span></div></header>
-          <div className="reviewer-thumb"><GenArt seed="review-item" /></div>
-          <ul className="checklist">
-            {CHECKS.map((c, i) => <li key={c} data-in="fade" data-at={1.6 + i * 0.1}><Icon name="check" size={14} />{c}</li>)}
-          </ul>
-        </article>
-
-        <div className="review-col review-col--out">
-          <span className="col-label mono" data-in="fade" data-at="2">Statut de chaque affirmation</span>
-          <span className="status status--ok" data-in="right" data-at="2.1"><Icon name="check" size={16} />Vérifié</span>
-          <span className="status status--warn" data-in="right" data-at="2.2"><Icon name="pause" size={16} />Incertain</span>
-          <span className="status status--muted" data-in="right" data-at="2.3"><Icon name="eye" size={16} />Non revu</span>
-        </div>
-      </div>
-      <ul className="rules" data-in="up" data-at="2.5">
-        <li><b>Œuvres générées par IA</b> exclues de la collection</li>
-        <li><b>Aucune auto-validation</b> : un contributeur ne vérifie pas sa propre soumission</li>
-        <li><b>Retouche ou optimisation</b> d’une photo réelle : jamais un motif de refus à elle seule</li>
-      </ul>
+      <p className="review-rule" data-in="fade" data-at="1.6">
+        <b>La règle.</b> Les œuvres générées par IA sont exclues de la collection. Un contributeur ne valide jamais sa propre
+        soumission. Une retouche ou une optimisation d’affichage ne suffit pas à refuser la photo d’une œuvre réelle.
+      </p>
     </Stage>
   );
 }
 
 /* ───────────── Le NFT de provenance ───────────── */
 
-const SPECS = [
-  { k: "Standard", v: "ERC‑721 · une œuvre = un token" },
-  { k: "Réseau", v: "Avalanche Fuji · C‑Chain" },
-  { k: "Stockage", v: "IPFS : média, aperçu et fiche" },
-  { k: "Empreinte", v: "sha256 du fichier maître, inscrite on‑chain" },
-  { k: "Fiche", v: "Immuable : aucune modification du tokenURI" },
-  { k: "Garde", v: "Mint vers le wallet de la galerie, gas payé par elle" },
+const SPECS: [string, string][] = [
+  ["Standard", "ERC‑721 : une œuvre, un token"],
+  ["Réseau", "Avalanche Fuji, C‑Chain"],
+  ["Stockage", "IPFS pour le média, l’aperçu et la fiche"],
+  ["Empreinte", "sha256 du fichier maître, inscrite on‑chain"],
+  ["Fiche", "Immuable, aucune modification du tokenURI"],
+  ["Garde", "Mint vers le wallet de la galerie, qui paie le gas"],
 ];
 
 export function Provenance({ instant, no }: SceneProps) {
   const fingerprint = sampleHex("sha:lova-provenance");
   return (
-    <Stage instant={instant} className="s-provenance">
-      <div className="prov-copy">
-        <Eyebrow no={no} label="Confiance · Provenance numérique" />
-        <Title lines={["Chaque œuvre acceptée"]} accent="laisse une trace." />
-        <Lead at={0.9}>
-          Après revue et publication, la fiche est figée et associée à un token. Aucun artisan n’a besoin de wallet :
-          la galerie agit comme dépositaire.
-        </Lead>
-        <dl className="specs">
-          {SPECS.map((s, i) => <div key={s.k} data-in="up" data-at={1.1 + i * 0.08}><dt className="mono">{s.k}</dt><dd>{s.v}</dd></div>)}
-        </dl>
-        <div className="hashline mono" data-in="fade" data-at="1.7">
-          <span>sha256(maître)</span><b aria-hidden="true">→</b>
-          <code data-scramble={`0x${fingerprint.slice(0, 40)}…`} data-at="1.75" data-dur="1.6">0x{fingerprint.slice(0, 40)}…</code>
+    <Stage instant={instant} className="p-provenance">
+      <div className="provenance-text">
+        <Kicker no={no}>La confiance · Provenance</Kicker>
+        <Headline lines={["Chaque œuvre acceptée"]} em="laisse une trace." />
+        <Standfirst at={0.8}>
+          Après la revue et la publication, la fiche est figée puis associée à un token. Aucun artisan n’a besoin de
+          wallet : la galerie agit comme dépositaire.
+        </Standfirst>
+        <table className="datasheet" data-in="up" data-at="1">
+          <caption>Fiche technique</caption>
+          <tbody>{SPECS.map(([k, v]) => <tr key={k}><th scope="row">{k}</th><td>{v}</td></tr>)}</tbody>
+        </table>
+        <p className="hashline" data-in="fade" data-at="1.4">
+          <span>sha256(maître) →</span>
+          <code data-scramble={`0x${fingerprint.slice(0, 32)}…`} data-at="1.45" data-dur="1.4">0x{fingerprint.slice(0, 32)}…</code>
           <small>exemple</small>
-        </div>
+        </p>
       </div>
-      <div className="prov-visual">
-        <div className="prov-chainid" data-in="fade" data-at="0.5" aria-label="Chain ID 43113">
-          <span className="mono">chainId</span>
-          <strong className="serif" data-count="43113" data-group="off" data-at="0.6" data-dur="1.8">43113</strong>
-        </div>
-        <div data-in="blur" data-at="0.35" data-dur="1.4" data-sfx="chime">
-          <TokenCard seed="lova-provenance" title="Fiche n° 0007" author="Collection LOVA · démo" tokenId={7} size="l" />
-        </div>
+      <div className="provenance-figure" data-in="up" data-at="0.5" data-dur="1.1" data-sfx="chime">
+        <Certificate seed="lova-provenance" lot={7} />
       </div>
     </Stage>
   );
 }
 
-/* ───────────── Ce que le token prouve ───────────── */
+/* ───────────── Idées reçues ───────────── */
 
-const YES = ["Un événement numérique, daté et vérifiable", "Le lien entre l’œuvre publiée et un instantané approuvé de sa fiche", "L’empreinte du fichier maître, lisible même si la fiche n’est plus épinglée"];
-const NO = ["L’authenticité physique de l’objet", "L’exactitude des affirmations de la fiche", "Le droit d’auteur ou la propriété de l’œuvre"];
+const MYTHS: { claim: string; verdict: boolean; why: string }[] = [
+  { claim: "Le token prouve l’authenticité physique de l’objet.", verdict: false, why: "Elle relève de preuves distinctes, examinées à part." },
+  { claim: "Le token garantit que la fiche dit vrai.", verdict: false, why: "L’exactitude des affirmations dépend de la revue humaine." },
+  { claim: "Le token donne la propriété de l’œuvre.", verdict: false, why: "Le droit d’auteur et la propriété exigent des autorisations distinctes." },
+  { claim: "Le token date un événement numérique et le lie à un instantané approuvé de la fiche.", verdict: true, why: "C’est son rôle, et il s’arrête là." },
+  { claim: "L’empreinte du fichier maître reste lisible même si la fiche n’est plus épinglée.", verdict: true, why: "Elle est inscrite dans le contrat, sur la chaîne." },
+];
 
-export function Scope({ instant, no }: SceneProps) {
+export function Myths({ instant, no }: SceneProps) {
   return (
-    <Stage instant={instant} className="s-scope">
-      <Eyebrow no={no} label="Confiance · Honnêteté du dispositif" />
-      <Title lines={["Ce que le token établit,"]} accent="et ce qu’il n’établit pas." />
-      <div className="scope-grid">
-        <section className="scope-col scope-col--yes glass glass--edge" data-in="left" data-at="0.9">
-          <h2><Icon name="check" />Il établit</h2>
-          <ul>{YES.map((y, i) => <li key={y} data-in="fade" data-at={1.1 + i * 0.1}>{y}</li>)}</ul>
-        </section>
-        <section className="scope-col scope-col--no glass" data-in="right" data-at="1">
-          <h2><Icon name="x" />Il n’établit pas</h2>
-          <ul>{NO.map((n, i) => <li key={n} data-in="fade" data-at={1.2 + i * 0.1}>{n}</li>)}</ul>
-          <p className="scope-foot">Ces points relèvent de preuves et d’autorisations distinctes.</p>
-        </section>
+    <Stage instant={instant} className="p-myths">
+      <div className="myths-head">
+        <Kicker no={no}>Enquête</Kicker>
+        <Headline size="xl" lines={["Idées"]} em="reçues." />
+        <Standfirst at={0.7}>Ce qu’un NFT de provenance établit, et ce qu’il n’établit pas.</Standfirst>
       </div>
-      <p className="banner serif" data-in="clip" data-at="1.8" data-dur="1">Pas de vente. Pas de spéculation. <em className="holo-text">Du patrimoine, documenté.</em></p>
+      <ol className="myths">
+        {MYTHS.map((m, i) => (
+          <li key={m.claim} data-in="up" data-at={0.9 + i * 0.12}>
+            <span className={`verdict ${m.verdict ? "verdict--true" : "verdict--false"}`}>{m.verdict ? "Vrai" : "Faux"}</span>
+            <p><b>{m.claim}</b> {m.why}</p>
+          </li>
+        ))}
+      </ol>
+      <p className="myths-foot" data-in="fade" data-at="1.7">Pas de vente. Pas de spéculation. <em>Du patrimoine, documenté.</em></p>
     </Stage>
   );
 }

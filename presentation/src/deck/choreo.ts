@@ -21,7 +21,7 @@ const HEX = "0123456789abcdef";
  * timeline les joue dans l’ordre du document.
  *
  *   data-split="lines|chars"   titre découpé, montée masquée
- *   data-in="up|left|right|fade|scale|blur|flip|clip|wipe"   entrée d’un bloc
+ *   data-in="up|left|right|fade|scale|clip|wipe"   entrée d’un bloc
  *   data-draw                  groupe SVG tracé, puis textes et aplats
  *   data-count="43113"         compteur (format fr-FR)
  *   data-bar="0.62"            barre qui se remplit (scaleX)
@@ -43,7 +43,8 @@ export function useChoreo(instant: boolean): RefObject<HTMLDivElement | null> {
       (sfx[name as SfxName] as (a?: number) => void)(arg);
     };
 
-    const tl = gsap.timeline({ defaults: { ease: "silk" }, paused: true, delay: 0.05 });
+    // Départ après le premier tiers du balayage de page.
+    const tl = gsap.timeline({ defaults: { ease: "silk" }, paused: true, delay: 0.3 });
     const splits: SplitText[] = [];
     let cursor = 0;
 
@@ -56,8 +57,8 @@ export function useChoreo(instant: boolean): RefObject<HTMLDivElement | null> {
         if (d.split === "chars") {
           const split = SplitText.create(node, { type: "chars,words", charsClass: "split-char" });
           splits.push(split);
-          tl.from(split.chars, { yPercent: 115, rotateX: -80, autoAlpha: 0, filter: "blur(6px)", duration: 1, stagger: 0.028, ease: "expo.out", transformOrigin: "50% 100%" }, at);
-          length = 0.35 + split.chars.length * 0.028;
+          tl.from(split.chars, { yPercent: 105, autoAlpha: 0, duration: 1.1, stagger: 0.05, ease: "expo.out" }, at);
+          length = 0.4 + split.chars.length * 0.05;
         } else {
           const split = SplitText.create(node, { type: "lines", mask: "lines", linesClass: "split-line" });
           splits.push(split);
@@ -71,12 +72,10 @@ export function useChoreo(instant: boolean): RefObject<HTMLDivElement | null> {
           case "left": Object.assign(from, { x: -56, autoAlpha: 0 }); break;
           case "right": Object.assign(from, { x: 56, autoAlpha: 0 }); break;
           case "fade": Object.assign(from, { autoAlpha: 0, ease: "power2.out" }); break;
-          case "scale": Object.assign(from, { scale: 0.9, autoAlpha: 0, transformOrigin: "50% 60%" }); break;
-          case "blur": Object.assign(from, { autoAlpha: 0, filter: "blur(18px)", scale: 1.04, ease: "power3.out" }); break;
-          case "flip": Object.assign(from, { rotateY: -70, autoAlpha: 0, transformPerspective: 1200, transformOrigin: "0% 50%", duration: Number(d.dur ?? 1.1) }); break;
+          case "scale": Object.assign(from, { scale: 0.94, autoAlpha: 0, transformOrigin: "50% 60%" }); break;
           case "clip": Object.assign(from, { clipPath: "inset(0% 0% 100% 0%)", duration: Number(d.dur ?? 1.1), ease: "power3.inOut" }); break;
           case "wipe": Object.assign(from, { clipPath: "inset(0% 100% 0% 0%)", duration: Number(d.dur ?? 0.9), ease: "power3.inOut" }); break;
-          default: Object.assign(from, { y: 36, autoAlpha: 0 });
+          default: Object.assign(from, { y: 28, autoAlpha: 0 });
         }
         tl.from(node, from, at);
         length = 0.22;

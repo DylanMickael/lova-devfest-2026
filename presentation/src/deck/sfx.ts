@@ -1,7 +1,7 @@
 /**
  * Bruitages synthétisés en Web Audio : aucun fichier, aucune licence.
- * Palette « galerie numérique » : souffle de passage, tic de compteur,
- * carillon de mint, balayage de scan. Volume volontairement bas.
+ * Palette « magazine » : page qui tourne, tic de compteur, carillon de
+ * mint, balayage de scan. Volume volontairement bas.
  */
 
 type Ctx = { ac: AudioContext; out: GainNode; wet: GainNode; noise: AudioBuffer };
@@ -84,7 +84,7 @@ function tone(c: Ctx, freq: number, at: number, dur: number, peak: number, type:
   o.connect(g); o.start(at); o.stop(at + dur + 0.05);
 }
 
-/** Passage d’une feuille : bruit filtré balayé, panoramique dans le sens de navigation. */
+/** Page qui tourne : bruit filtré balayé, panoramique dans le sens de lecture. */
 export function whoosh(dir: 1 | -1, intensity = 1) {
   const c = ready(); if (!c) return;
   const t = c.ac.currentTime;
@@ -135,14 +135,6 @@ export const sfx = {
     const g = bus(c, 0.5);
     g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(0.03, t + 0.2); g.gain.exponentialRampToValueAtTime(0.0001, t + 1.2);
     o.connect(lp); lp.connect(g); o.start(t); o.stop(t + 1.25);
-  },
-  /** Bascule jour / nuit. */
-  toggle(toDark: boolean) {
-    const c = ready(); if (!c) return;
-    const t = c.ac.currentTime;
-    const [a, b] = toDark ? [784, 392] : [392, 784];
-    tone(c, a, t, 0.35, 0.05, "sine", 0.6);
-    tone(c, b, t + 0.09, 0.6, 0.05, "sine", 0.7);
   },
 };
 

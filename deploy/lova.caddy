@@ -1,0 +1,11 @@
+# Présentation LOVA — numéro spécial DevFest 2026 (statique, publique).
+# À copier dans /opt/ades/sites/ ; importé par le Caddy public d’ades-it-ecosystem.
+# Service : conteneur `lova-deck` (Caddy file_server, port 80) sur le réseau ades.
+lova.132-145-17-50.sslip.io {
+	encode zstd gzip
+	reverse_proxy lova-deck:80
+	log {
+		output stdout
+		format console
+	}
+}

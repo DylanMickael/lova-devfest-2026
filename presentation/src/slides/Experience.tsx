@@ -2,105 +2,91 @@ import { useMemo } from "react";
 import { Artifact } from "../components/Artifact";
 import { GenArt } from "../components/GenArt";
 import { prng, seedFrom } from "../components/genart";
-import { Eyebrow, Icon, Stage, Title, type IconName } from "../components/Primitives";
+import { Caption, Headline, Kicker, Rule, Stage, Standfirst } from "../components/Primitives";
 import type { SceneProps } from "../deck/types";
 
 /* ───────────── Visiter le musée ───────────── */
 
-const VISIT: { icon: IconName; text: string }[] = [
-  { icon: "hand", text: "Se déplacer à gauche ou à droite dans la galerie" },
-  { icon: "eye", text: "Choisir une peinture pour s’approcher de ses détails et de son histoire" },
-  { icon: "cube", text: "Faire venir une sculpture au premier plan et la tourner en 3D" },
-  { icon: "door", text: "Revenir dans la galerie et poursuivre la visite" },
+const VISIT = [
+  "On se déplace à gauche ou à droite dans la galerie.",
+  "On choisit une peinture pour s’approcher de ses détails et de son histoire.",
+  "On fait venir une sculpture au premier plan et on la tourne en 3D.",
+  "On revient dans la galerie pour poursuivre la visite.",
 ];
-
-const FRAMES = ["salle-a", "salle-b", "salle-c", "salle-d", "salle-e", "salle-f", "salle-g"];
+const FRAMES = ["salle-a", "salle-b", "salle-c", "salle-d", "salle-e", "salle-f"];
 
 export function Visit({ instant, no }: SceneProps) {
   return (
-    <Stage instant={instant} className="s-visit">
-      <div className="visit-copy">
-        <Eyebrow no={no} label="Expérience 1 · Visiter" />
-        <Title lines={["Une galerie"]} accent="où l’on s’approche." />
-        <ol className="steps">
-          {VISIT.map((s, i) => (
-            <li key={s.text} data-in="left" data-at={0.8 + i * 0.12}>
-              <span className="steps-no mono">0{i + 1}</span><span className="steps-icon"><Icon name={s.icon} /></span><span>{s.text}</span>
-            </li>
-          ))}
+    <Stage instant={instant} className="p-visit">
+      <div className="visit-text">
+        <Kicker no={no}>Expérience · Visiter</Kicker>
+        <Headline lines={["Une galerie"]} em="où l’on s’approche." />
+        <ol className="numbered">
+          {VISIT.map((s, i) => <li key={s} data-in="up" data-at={0.9 + i * 0.1}><span>{i + 1}</span>{s}</li>)}
         </ol>
       </div>
-      <div className="gallery" data-in="blur" data-at="0.25" data-dur="1.3" aria-hidden="true">
-        <div className="gallery-spot" />
-        <div className={`gallery-track ${instant ? "" : "is-moving"}`}>
-          {[...FRAMES, ...FRAMES].map((seed, i) => (
-            <figure key={i} className={`frame ${i % FRAMES.length === 3 ? "frame--focus" : ""}`}>
-              <div className="frame-wood"><GenArt seed={seed} variant={i % 2 ? "portrait" : "weave"} /></div>
-            </figure>
-          ))}
+      <figure className="visit-figure">
+        <div className="wall" data-in="clip" data-at="0.3" data-dur="1.2" aria-hidden="true">
+          <div className={`wall-track ${instant ? "" : "is-moving"}`}>
+            {[...FRAMES, ...FRAMES].map((seed, i) => (
+              <div key={i} className={`wall-frame wall-frame--${i % 3}`}><GenArt seed={seed} variant={i % 2 ? "portrait" : "weave"} /></div>
+            ))}
+          </div>
+          <div className="wall-label">
+            <span>Salle Peinture</span>
+            <b>Titre · Créateur · Technique · Provenance déclarée</b>
+            <span className="wall-label-status">Information vérifiée</span>
+          </div>
         </div>
-        <aside className="cartel glass" data-in="up" data-at="1.4">
-          <span className="tag mono">Cartel</span>
-          <dl>
-            {["Titre", "Créateur", "Technique", "Provenance déclarée"].map(k => <div key={k}><dt>{k}</dt><dd><i className="skeleton" /></dd></div>)}
-          </dl>
-          <span className="cartel-status"><i aria-hidden="true" />Information vérifiée</span>
-        </aside>
-        <div className="gallery-floor" />
-      </div>
+        <Caption fig="Fig. 1" at={1.4}>La galerie, inspirée d’un vrai lieu d’exposition : lumière, déplacement latéral, cartel de l’œuvre.</Caption>
+      </figure>
     </Stage>
   );
 }
 
 /* ───────────── Contribuer ───────────── */
 
-const FIELDS = ["Nom de l’œuvre", "Description", "Créateur", "Origine", "Droits de publication"];
-const MEDIA: { icon: IconName; label: string }[] = [
-  { icon: "eye", label: "Photo" },
-  { icon: "spark", label: "Vidéo" },
-  { icon: "cube", label: "Modèle 3D autorisé" },
+const FIELDS = ["Nom de l’œuvre", "Créateur", "Origine", "Description"];
+const STATES = [
+  { label: "Brouillon", text: "La fiche se prépare." },
+  { label: "Soumis", text: "Les médias et les droits sont joints." },
+  { label: "En revue", text: "Un relecteur habilité examine les preuves." },
 ];
 
 export function Contribute({ instant, no }: SceneProps) {
   return (
-    <Stage instant={instant} className="s-contribute">
-      <div className="contrib-head">
-        <Eyebrow no={no} label="Expérience 2 · Contribuer" />
-        <Title lines={["Chacun peut enrichir"]} accent="la collection." />
+    <Stage instant={instant} className="p-contribute">
+      <div className="contribute-text">
+        <Kicker no={no}>Expérience · Contribuer</Kicker>
+        <Headline lines={["Chacun peut enrichir"]} em="la collection." />
+        <Standfirst at={0.8}>Une fiche, des médias, une soumission. Le contributeur suit ensuite le sort de sa proposition.</Standfirst>
+        <ol className="states">
+          {STATES.map((s, i) => (
+            <li key={s.label} data-in="left" data-at={1.1 + i * 0.14}><b>{s.label}</b><span>{s.text}</span></li>
+          ))}
+          <li className="states-outcomes" data-in="left" data-at="1.55">
+            <b>Puis</b>
+            <span><em className="ok">Accepté</em> · <em className="warn">À compléter</em> · <em className="ko">Refusé</em></span>
+          </li>
+        </ol>
       </div>
-      <div className="contrib-body">
-        <form className="record glass glass--edge" data-in="flip" data-at="0.7" onSubmit={e => e.preventDefault()} aria-label="Maquette de fiche d’œuvre">
-          <header className="record-head"><span className="tag mono">Nouvelle fiche</span><span className="record-dot" aria-hidden="true" /></header>
-          <div className="record-fields">
-            {FIELDS.map((f, i) => (
-              <label key={f} className="field" data-in="fade" data-at={1 + i * 0.07}><span>{f}</span><i className="skeleton" style={{ width: `${88 - i * 9}%` }} /></label>
-            ))}
-          </div>
-          <div className="record-media">
-            {MEDIA.map((m, i) => <span key={m.label} className="media-tile" data-in="scale" data-at={1.4 + i * 0.08}><Icon name={m.icon} size={20} />{m.label}</span>)}
-          </div>
-          <div className="record-actions" data-in="up" data-at="1.7">
-            <span className="btn btn--ghost">Aperçu</span>
-            <span className="btn btn--holo">Soumettre pour revue</span>
-          </div>
-        </form>
-
-        <div className="flow" aria-label="Cycle de vie d’une contribution">
-          <svg className="flow-lines" viewBox="0 0 420 360" data-draw data-at="1.6" data-dur="1.4" aria-hidden="true" preserveAspectRatio="none">
-            <path d="M210 40 V110" /><path d="M210 150 V200" />
-            <path d="M210 240 C210 280, 70 270, 70 318" /><path d="M210 240 V318" /><path d="M210 240 C210 280, 350 270, 350 318" />
-          </svg>
-          <span className="flow-node" style={{ top: "4%" }} data-in="scale" data-at="1.5">Brouillon</span>
-          <span className="flow-node" style={{ top: "33%" }} data-in="scale" data-at="1.9">Soumis</span>
-          <span className="flow-node flow-node--active" style={{ top: "56%" }} data-in="scale" data-at="2.2" data-sfx="blip">En revue</span>
-          <div className="flow-outcomes">
-            <span className="status status--ok" data-in="up" data-at="2.6"><Icon name="check" size={16} />Accepté</span>
-            <span className="status status--warn" data-in="up" data-at="2.7"><Icon name="pause" size={16} />À compléter</span>
-            <span className="status status--ko" data-in="up" data-at="2.8"><Icon name="x" size={16} />Refusé</span>
-          </div>
-          <p className="flow-note" data-in="fade" data-at="3">Le contributeur suit l’état de sa soumission. Une œuvre acceptée peut être publiée, puis associée à un NFT de provenance.</p>
-        </div>
-      </div>
+      <form className="coupon" data-in="up" data-at="0.5" data-dur="1" onSubmit={e => e.preventDefault()} aria-label="Bulletin de contribution (maquette)">
+        <span className="coupon-scissors" aria-hidden="true">✂</span>
+        <header>
+          <strong>Bulletin de contribution</strong>
+          <span>À remplir en ligne, aucun timbre nécessaire</span>
+        </header>
+        {FIELDS.map(f => <label key={f} className="coupon-field"><span>{f}</span><i /></label>)}
+        <fieldset className="coupon-checks">
+          <legend>Médias joints</legend>
+          <span><i />Photographie</span><span><i />Vidéo</span><span><i />Modèle 3D autorisé</span>
+        </fieldset>
+        <fieldset className="coupon-checks">
+          <legend>Droits</legend>
+          <span><i className="is-checked" />J’ai le droit de publier ces médias</span>
+        </fieldset>
+        <footer><span>Aperçu</span><b>Soumettre pour revue →</b></footer>
+      </form>
     </Stage>
   );
 }
@@ -114,53 +100,46 @@ function PseudoQR({ seed }: { seed: string }) {
     for (let y = 0; y < n; y++) for (let x = 0; x < n; x++) if (!finder(x, y) && rnd() > 0.52) out.push([x, y]);
     return out;
   }, [seed]);
-  const Finder = ({ x, y }: { x: number; y: number }) => (
-    <g><rect x={x + 0.5} y={y + 0.5} width={6} height={6} fill="none" stroke="currentColor" /><rect x={x + 2} y={y + 2} width={3} height={3} /></g>
-  );
+  const finders = [[0, 0], [18, 0], [0, 18]];
   return (
     <svg className="qr" viewBox="-1 -1 27 27" fill="currentColor" role="img" aria-label="QR code illustratif">
-      {cells.map(([x, y]) => <rect key={`${x}-${y}`} x={x} y={y} width={1} height={1} rx={0.2} />)}
-      <Finder x={0} y={0} /><Finder x={18} y={0} /><Finder x={0} y={18} />
+      {cells.map(([x, y]) => <rect key={`${x}-${y}`} x={x} y={y} width={1} height={1} />)}
+      {finders.map(([x, y]) => (
+        <g key={`${x}-${y}`}><rect x={x + 0.5} y={y + 0.5} width={6} height={6} fill="none" stroke="currentColor" /><rect x={x + 2} y={y + 2} width={3} height={3} /></g>
+      ))}
     </svg>
   );
 }
 
-const HANDOFF = ["Ouvrir la fiche sur ordinateur, « Scanner avec mon iPhone »", "Scanner le QR code : l’iPhone rejoint la session", "Autoriser la capture et scanner l’objet", "Vérifier le scan sur le téléphone, puis l’envoyer", "Revenir sur ordinateur : inspecter le modèle 3D, ajouter le contexte"];
-const PIPELINE = ["Capture USDZ", "Nettoyage hors ligne", "GLB optimisé", "Visionneuse web"];
+const HANDOFF = [
+  "Sur ordinateur, ouvrir la fiche de l’œuvre et choisir « Scanner avec mon iPhone ».",
+  "Scanner le QR code : l’iPhone rejoint la session.",
+  "Autoriser la capture, puis scanner l’objet.",
+  "Vérifier le scan sur le téléphone et lancer l’envoi.",
+  "Revenir sur ordinateur, inspecter le modèle 3D et ajouter le contexte.",
+];
 
 export function Handoff({ instant, no }: SceneProps) {
   return (
-    <Stage instant={instant} className="s-handoff">
-      <div className="handoff-copy">
-        <Eyebrow no={no} label="Expérience 3 · Numériser" />
-        <Title lines={["Du bureau à l’iPhone,"]} accent="et retour." />
-        <ol className="steps steps--compact">
-          {HANDOFF.map((s, i) => <li key={s} data-in="left" data-at={0.75 + i * 0.1}><span className="steps-no mono">0{i + 1}</span><span>{s}</span></li>)}
+    <Stage instant={instant} className="p-handoff">
+      <div className="handoff-text">
+        <Kicker no={no}>Reportage · Numériser</Kicker>
+        <Headline lines={["Du bureau à l’iPhone,"]} em="et retour." />
+        <Rule at={0.8} />
+        <ol className="numbered numbered--tight">
+          {HANDOFF.map((s, i) => <li key={s} data-in="up" data-at={0.9 + i * 0.08}><span>{i + 1}</span>{s}</li>)}
         </ol>
       </div>
-      <div className="handoff-stage">
-        <div className="device-desktop glass" data-in="left" data-at="0.4" data-dur="1">
-          <div className="browser-bar" aria-hidden="true"><i /><i /><i /><span className="mono">lova · fiche d’œuvre</span></div>
-          <div className="desktop-body">
-            <div className="desktop-thumb"><GenArt seed="handoff-item" /></div>
-            <div className="desktop-qr"><PseudoQR seed="lova-session" /><span className="mono">Scanner avec mon iPhone</span></div>
+      <figure className="handoff-figure">
+        <div className="handoff-devices">
+          <div className="handoff-qr" data-in="up" data-at="0.4"><PseudoQR seed="lova-session" /><span>Scanner avec mon iPhone</span></div>
+          <div className="phone" data-in="up" data-at="0.6" data-sfx="scan">
+            <div className="phone-screen"><Artifact reduced={instant} mode="scan" /><span className="phone-rec">LiDAR · capture</span></div>
           </div>
         </div>
-        <svg className="handoff-beam" viewBox="0 0 120 40" aria-hidden="true" data-draw data-at="1.1" data-dur="0.8">
-          <path d="M4 20 H108"/><path d="M100 12 L110 20 L100 28" />
-        </svg>
-        <div className="device-phone" data-in="right" data-at="0.6" data-dur="1.1" data-sfx="scan">
-          <div className="phone-notch" aria-hidden="true" />
-          <div className="phone-screen">
-            <Artifact reduced={instant} mode="scan" />
-            <span className="phone-rec mono"><i aria-hidden="true" />LiDAR · capture</span>
-          </div>
-        </div>
-        <ol className="pipeline mono" aria-label="Chaîne de traitement 3D">
-          {PIPELINE.map((p, i) => <li key={p} data-in="up" data-at={1.5 + i * 0.12}>{p}</li>)}
-        </ol>
-        <p className="handoff-proof" data-in="fade" data-at="2.1"><Icon name="check" size={16} />Étude de faisabilité : un scan réel est passé de l’USDZ au GLB, jusqu’à la visionneuse web.</p>
-      </div>
+        <p className="pipeline" data-in="fade" data-at="1.4">Capture USDZ <b>→</b> nettoyage hors ligne <b>→</b> GLB optimisé <b>→</b> visionneuse web</p>
+        <Caption fig="Fig. 2" at={1.6}>L’étude de faisabilité a fait passer un scan réel de l’USDZ au GLB, jusqu’à la visionneuse web.</Caption>
+      </figure>
     </Stage>
   );
 }

@@ -1,69 +1,72 @@
-# LOVA — Présentation DevFest 2026
+# LOVA — Numéro spécial DevFest 2026
 
-Présentation interactive plein écran du projet **LOVA — L’héritage malagasy prend vie**, présenté au DevFest 2026 (hackathon *Preserving the Art*).
+Présentation interactive du projet **LOVA — L’héritage malagasy prend vie** (DevFest 2026, hackathon *Preserving the Art*), composée comme un magazine : une, édito, sommaire, ouvertures de partie, reportage, enquête, ours, quatrième de couverture.
 Le contenu reprend la documentation du dépôt `devfest2026` : README, MVP, architecture et service NFT.
 
-## Lancer
+- **En ligne (serveur)** : https://lova.132-145-17-50.sslip.io/
+- **Miroir GitHub Pages** : https://dylanmickael.github.io/lova-devfest-2026/
+
+## Lancer en local
 
 ```sh
 cd presentation
 npm install
 npm run dev        # http://localhost:4180
 npm run build      # tsc + build de production dans presentation/dist/
-npm run preview    # sert le build sur http://localhost:4180
 ```
 
-Le build est statique (`base: "./"`) et se publie tel quel sur n’importe quel hébergement de fichiers.
-
-## Commandes pendant la présentation
+## Pendant la présentation
 
 | Touche | Action |
 |---|---|
-| `→` `Espace` `PageDown` / `←` `PageUp` | Diapositive suivante / précédente |
-| `Début` / `Fin` | Première / dernière |
-| `T` | Bascule **jour / nuit** (révélation circulaire depuis l’interrupteur) |
+| `→` `Espace` / `←` | Page suivante / précédente (la page se tourne) |
+| `Début` / `Fin` | Une / quatrième de couverture |
 | `O` | Sommaire |
-| `R` | Rejouer l’animation de la diapositive |
+| `R` | Rejouer l’animation de la page |
 | `M` | Bruitages on/off |
 | `F` | Plein écran |
 
-Navigation tactile par balayage horizontal. L’URL `#n` ouvre directement la diapositive *n*. Le thème et le son sont mémorisés dans le navigateur.
+On peut aussi naviguer par balayage tactile. L’URL `#n` ouvre la page *n*. Les titres de la une, du sommaire et des ouvertures de partie sont cliquables.
 
-## Déroulé (21 blocs)
+## Direction artistique
 
-0. Couverture · L’œuvre en volume (3D) · Sommaire
-1. **Le constat** : des œuvres hors de portée, notre réponse
-2. **L’expérience** : visiter le musée, contribuer, du bureau à l’iPhone (LiDAR)
-3. **La confiance** : revue humaine, NFT de provenance, ce que le token prouve et ne prouve pas
-4. **La plateforme** : architecture, du clic au bloc, équipe, démonstration, et après
-5. Misaotra
+- **Papiers** : chaque page choisit son fond, en alternance clair et sombre : ivoire (`paper`), sable (`sand`), encre (`ink`), lie-de-vin (`wine`). Le titre courant et le folio suivent la page affichée.
+- **Typographies** : Bodoni Moda pour la manchette et les titres, Archivo condensé pour les chiffres et la titraille, Newsreader pour le texte courant, IBM Plex Mono pour les données.
+- **Motion** : le tourne-page est un balayage `clip-path` ; les titres montent ligne à ligne, les filets se tracent, les schémas se dessinent. Pas de flou, de mode de fusion ni de `backdrop-filter` : l’animation reste fluide sur une machine modeste.
+- **Visuels** : motifs tissés génératifs et statuette 3D procédurale. Aucune image patrimoniale n’est reproduite tant que ses droits ne sont pas validés. Les références de token sont des spécimens étiquetés.
 
-## Architecture du code
+## Code
 
 ```
 presentation/src/
-  App.tsx                 Coque : navigation, transitions de scène, dock, sommaire, interrupteur de thème
-  deck/
-    choreo.ts             Chorégraphie déclarative GSAP (data-split, data-in, data-draw, data-count, data-scramble…)
-    theme.ts              Thème jour/nuit : store externe + View Transitions API
-    sfx.ts                Bruitages synthétisés en Web Audio (aucun fichier)
-    content.ts, types.ts  Contenus partagés et types des scènes
+  App.tsx                 Coque : tourne-page, titre courant, folio, sommaire, clavier et tactile
+  deck/                   Chorégraphie GSAP déclarative (data-*), bruitages Web Audio, contenus, types
   components/
-    TokenCard.tsx         Carte NFT holographique (inclinaison 3D, film irisé, reflets)
-    GenArt.tsx, genart.ts Motifs tissés génératifs et empreintes d’exemple, déterministes
+    Primitives.tsx        Stage, surtitre, titre, chapô, légende, filet
+    Print.tsx             Code-barres, tampon, fiche de lot (NFT présenté comme un lot de catalogue)
+    GenArt.tsx            Motifs tissés génératifs, déterministes
     Artifact3D.tsx        Statuette procédurale React Three Fiber (vitrine ou scan LiDAR), chargée à la demande
-    Backdrop.tsx          Fond animé : halos, treillis de blocs, projecteur, grain
-    ChainProgress.tsx     Progression en chaîne de blocs
-    Primitives.tsx        Stage, titres, puces, icônes
-  slides/                 Une scène par fonction, regroupées par partie
-  styles/                 tokens.css (thèmes), deck.css (coque), components.css, slides.css
+  slides/                 Une scène par page, regroupées par partie ; index.ts fixe la pagination
+  styles/                 base (papiers, polices), chrome (coque), editorial (composants), pages
 ```
 
-- **Stack** : React 19, TypeScript 7, Vite 8, GSAP 3.15 (SplitText, DrawSVG, ScrambleText), motion, three + React Three Fiber.
-- **Thèmes** : toutes les couleurs viennent des jetons CSS de `tokens.css`. Changer de thème ne provoque aucun rendu React.
-- **Accessibilité** : `prefers-reduced-motion` est respecté, un bouton fige les animations, les contrôles sont nommés pour les lecteurs d’écran et la navigation se fait entièrement au clavier.
-- **Performance** : Three.js est découpé dans un fragment chargé seulement à la première scène 3D.
+Stack : React 19, TypeScript 7, Vite 8, GSAP 3.15, motion, three + React Three Fiber.
 
-## Honnêteté des visuels
+## Déploiement sur le serveur
 
-Le dépôt LOVA n’embarque pas d’images patrimoniales tant que leurs droits ne sont pas validés (D18). La présentation n’utilise donc que des visuels **générés** : motifs tissés, statuette procédurale. Les numéros de token, empreintes sha256 et hashes de transaction affichés sont des **exemples** étiquetés comme tels (« Aperçu illustratif », « exemple »), pas des transactions réelles.
+Le conteneur `lova-deck` (image `caddy:2.10-alpine`, déjà présente pour le Caddy public) sert `presentation/dist` en lecture seule sur le réseau Docker `ades`. Le Caddy public d’`ades-it-ecosystem` termine le TLS via le fichier `/opt/ades/sites/lova.caddy`, prévu pour les sites propres à l’hôte et jamais écrasé par la CI.
+
+```sh
+# Mettre à jour la présentation : rebuild, le conteneur sert aussitôt la nouvelle version.
+(cd presentation && npm ci && npm run build)
+
+# Première installation (déjà faite)
+docker compose -f deploy/compose.yml up -d
+cp deploy/lova.caddy /opt/ades/sites/lova.caddy
+docker exec ades-it-ecosystem-caddy-1 caddy validate --config /etc/caddy/Caddyfile --adapter caddyfile
+docker exec ades-it-ecosystem-caddy-1 caddy reload --config /etc/caddy/Caddyfile --adapter caddyfile
+```
+
+Le conteneur est limité à 64 Mo de RAM et 0,25 CPU, avec un système de fichiers en lecture seule. Les assets versionnés sont servis avec un cache immuable d’un an, et le HTML sans cache.
+
+GitHub Pages reste reconstruit à chaque push sur `main` (`.github/workflows/pages.yml`).

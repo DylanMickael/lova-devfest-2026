@@ -1,12 +1,20 @@
 import type { ReactNode } from "react";
 
-export type SceneProps = { instant: boolean; no: string };
+/** Fond de la page : chaque page du numéro choisit son papier. */
+export type Tone = "paper" | "sand" | "ink" | "wine";
+
+export type SceneProps = {
+  instant: boolean;
+  /** Numéro de page, sur deux chiffres. */
+  no: string;
+  /** Aller à une page (index à partir de 0). */
+  go: (index: number) => void;
+};
 
 export type SlideDef = {
   chapter: string;
-  /** 0 = ouverture/clôture, 1–4 = parties. */
+  /** 0 = une, édito, sommaire et quatrième ; 1–4 = parties. */
   part: 0 | 1 | 2 | 3 | 4;
-  /** "up" : feuille d’ouverture de partie, transition verticale. */
-  vector?: "up";
+  tone: Tone;
   Scene: (props: SceneProps) => ReactNode;
 };

@@ -21,7 +21,7 @@ function build(seed: string, variant: "weave" | "portrait") {
   let k = 0;
 
   while (y < H) {
-    const h = Math.min(H - y, 5 + Math.floor(rnd() * 13));
+    const h = Math.min(H - y, (variant === "portrait" ? 7 : 5) + Math.floor(rnd() * 13));
     const bg = pick();
     let fg = pick();
     if (fg === bg) fg = palette[(palette.indexOf(bg) + 2) % palette.length];
@@ -55,8 +55,7 @@ function build(seed: string, variant: "weave" | "portrait") {
     y += h;
   }
 
-  const sun = variant === "portrait" || rnd() > 0.45;
-  return { shapes, palette, sun, sunY: 30 + rnd() * 40, sunR: 16 + rnd() * 10 };
+  return { shapes };
 }
 
 export const GenArt = memo(function GenArt({ seed, className = "", title, variant = "weave" }: Props) {
@@ -65,23 +64,12 @@ export const GenArt = memo(function GenArt({ seed, className = "", title, varian
   return (
     <svg className={`genart ${className}`} viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="xMidYMid slice" role={title ? "img" : undefined} aria-label={title} aria-hidden={title ? undefined : true}>
       <defs>
-        <radialGradient id={`sun-${id}`} cx="50%" cy="50%" r="50%">
-          <stop offset="0" stopColor="#fff3dc" stopOpacity="0.95" />
-          <stop offset="0.55" stopColor={art.palette[1]} stopOpacity="0.85" />
-          <stop offset="1" stopColor={art.palette[1]} stopOpacity="0" />
-        </radialGradient>
         <linearGradient id={`shade-${id}`} x1="0" y1="0" x2="0" y2="1">
           <stop offset="0" stopColor="#000" stopOpacity="0" />
-          <stop offset="1" stopColor="#000" stopOpacity="0.35" />
+          <stop offset="1" stopColor="#000" stopOpacity="0.18" />
         </linearGradient>
       </defs>
       {art.shapes}
-      {art.sun && (
-        <g style={{ mixBlendMode: "screen" }}>
-          <circle cx={50} cy={art.sunY} r={art.sunR * 1.6} fill={`url(#sun-${id})`} />
-          <path d={`M50 ${art.sunY - art.sunR} L${50 + art.sunR} ${art.sunY} L50 ${art.sunY + art.sunR} L${50 - art.sunR} ${art.sunY}Z`} fill="none" stroke="#fff3dc" strokeOpacity="0.7" strokeWidth="0.6" />
-        </g>
-      )}
       <rect width={W} height={H} fill={`url(#shade-${id})`} />
     </svg>
   );

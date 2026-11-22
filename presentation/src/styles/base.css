@@ -1,0 +1,82 @@
+/*
+ * LOVA — numéro spécial. Jetons d’imprimerie.
+ * Quatre papiers : ivoire (paper), sable (sand), encre (ink), lie-de-vin (wine).
+ * Chaque page déclare son papier via data-tone ; la coque suit la page courante.
+ */
+
+:root {
+  --display: "Bodoni Moda", "Didot", "Bodoni 72", serif;
+  --grotesk: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --text: "Newsreader", Georgia, serif;
+  --mono: "IBM Plex Mono", ui-monospace, monospace;
+
+  --runner: 52px;
+  --folio: 64px;
+  --gutter: clamp(16px, 4vw, 72px);
+  --ease: cubic-bezier(0.77, 0, 0.18, 1);
+
+  /* Grain d’impression : une tuile statique, aucun mélange de calques. */
+  --grain-img: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.5 0 0 0 0 0.45 0 0 0 0 0.4 0 0 0 0.55 0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+[data-tone="paper"] {
+  --bg: #f2ece1;
+  --fg: #1a1612;
+  --fg-2: #4d453c;
+  --fg-3: #8a8073;
+  --rule: rgb(26 22 18 / 0.2);
+  --accent: #8c2f22;
+  --accent-2: #a9783a;
+  --ok: #2f6b4a; --warn: #93650f; --ko: #a3342a;
+  --grain: 0.16;
+}
+[data-tone="sand"] {
+  --bg: #e3d3b8;
+  --fg: #1c150f;
+  --fg-2: #4a3d2f;
+  --fg-3: #7d6b56;
+  --rule: rgb(28 21 15 / 0.24);
+  --accent: #7a2518;
+  --accent-2: #5b4326;
+  --ok: #2b6244; --warn: #7d540a; --ko: #96291f;
+  --grain: 0.2;
+}
+[data-tone="ink"] {
+  --bg: #141210;
+  --fg: #efe7da;
+  --fg-2: #c2b8a8;
+  --fg-3: #877d6f;
+  --rule: rgb(239 231 218 / 0.18);
+  --accent: #d9a866;
+  --accent-2: #c8553f;
+  --ok: #8fc7a0; --warn: #e6b961; --ko: #f08b78;
+  --grain: 0.1;
+}
+[data-tone="wine"] {
+  --bg: #5a1c15;
+  --fg: #f4e6d4;
+  --fg-2: #e2c8b0;
+  --fg-3: #bb957b;
+  --rule: rgb(244 230 212 / 0.26);
+  --accent: #f0c58a;
+  --accent-2: #f4e6d4;
+  --ok: #b7e0c1; --warn: #f5d08a; --ko: #ffb4a3;
+  --grain: 0.12;
+}
+
+* { box-sizing: border-box; }
+html, body, #root { width: 100%; height: 100%; margin: 0; }
+html { background: #141210; }
+body {
+  overflow: hidden;
+  font-family: var(--text);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  font-synthesis: none;
+  font-optical-sizing: auto;
+}
+button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; text-align: inherit; }
+svg { display: block; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+::selection { background: var(--accent); color: var(--bg); }
+.mono { font-family: var(--mono); }

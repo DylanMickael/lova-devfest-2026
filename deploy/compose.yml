@@ -1,0 +1,31 @@
+# Présentation LOVA servie en statique, derrière le Caddy public du serveur.
+# Construire d’abord : (cd ../presentation && npm ci && npm run build)
+name: lova-deck
+
+services:
+  lova-deck:
+    # Même image que le Caddy public : aucun téléchargement supplémentaire.
+    image: caddy:2.10-alpine
+    container_name: lova-deck
+    restart: unless-stopped
+    read_only: true
+    mem_limit: 64m
+    cpus: 0.25
+    volumes:
+      - ../presentation/dist:/srv:ro
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+    tmpfs:
+      - /data
+      - /config
+    networks:
+      - ades
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1/"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+
+networks:
+  ades:
+    external: true
+    name: ades-it-ecosystem_ades
